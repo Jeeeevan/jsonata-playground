@@ -1,0 +1,69 @@
+{
+  "name": "jsonata-playground",
+  "displayName": "JSONata Playground",
+  "description": "Live JSONata expression evaluator with split-view editor for JSON input and JSONata queries",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.110.0"
+  },
+  "categories": [
+    "Other",
+    "Formatters",
+    "Programming Languages"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "jsonata-playground.open",
+        "title": "Open JSONata Playground"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "jsonata-playground.open"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "jsonata-playground-explorer",
+          "title": "JSONata",
+          "icon": "media/jsonata-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "jsonata-playground-explorer": [
+        {
+          "id": "jsonata-playground-view",
+          "name": "JSONata",
+          "type": "webview"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "dependencies": {
+    "jsonata": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.110.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.56.1",
+    "eslint": "^9.39.3",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
