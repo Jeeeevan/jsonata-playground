@@ -133,7 +133,16 @@ function setupPlaygroundPanel(panel: vscode.WebviewPanel) {
 					error: null
 				});
 			} catch (error) {
-				const errorMessage = error instanceof Error ? error.message : String(error);
+				let errorMessage = '';
+				if (error instanceof Error) {
+					errorMessage = error.message;
+				} else if (typeof error === 'string') {
+					errorMessage = error;
+				} else if (error && typeof error === 'object' && 'message' in error) {
+					errorMessage = String((error as any).message);
+				} else {
+					errorMessage = JSON.stringify(error);
+				}
 				const errorLine = extractLineNumber(errorMessage);
 				panel.webview.postMessage({
 					command: 'updateOutput',
@@ -451,15 +460,17 @@ function getPlaygroundHTML(): string {
 			const msg = e.data;
 			if (msg.command === 'updateOutput') {
 				if (msg.error) {
+					output.innerHTML = '';
 					output.textContent = msg.error;
 					output.className = 'output-area error';
 					status.textContent = '❌ Error';
-					if (msg.errorLine !== null) {
+					if (msg.errorLine !== null && msg.errorLine >= 0) {
 						const lineHeight = parseFloat(getComputedStyle(expr).lineHeight);
 						errLine.style.top = (msg.errorLine * lineHeight) + 'px';
 						errLine.style.display = 'block';
 					}
 				} else {
+					output.innerHTML = '';
 					output.textContent = msg.result || '';
 					output.className = 'output-area';
 					errLine.style.display = 'none';
